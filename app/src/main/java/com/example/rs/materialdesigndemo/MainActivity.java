@@ -1,5 +1,6 @@
 package com.example.rs.materialdesigndemo;
 
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -8,16 +9,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import ui.CardContentFragment;
@@ -25,12 +22,12 @@ import ui.ListContentFragment;
 import ui.PagerAdapter;
 import ui.TileContentFragment;
 
-import static com.example.rs.materialdesigndemo.R.id.action_bar_container;
 import static com.example.rs.materialdesigndemo.R.id.drawer;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private String TAG = "MainActivity";
+    private Snackbar mSnackbar;
 
 
     @Override
@@ -81,22 +78,22 @@ public class MainActivity extends AppCompatActivity {
                         // TODO: handle navigation
                         // Closing drawer on item click
                         mDrawerLayout.closeDrawers();
-                        if(menuItem.getItemId() == R.id.one){
+                        if (menuItem.getItemId() == R.id.one) {
 
-                        } else if(menuItem.getItemId() == R.id.two){
+                        } else if (menuItem.getItemId() == R.id.two) {
 
-                        } else if (menuItem.getItemId() == R.id.three){
+                        } else if (menuItem.getItemId() == R.id.three) {
 
                         }
                         return true;
                     }
                 });
-        Log.v(TAG,  "" + navigationView.getMenu().getItem(0).getTitle());
+        Log.v(TAG, "" + navigationView.getMenu().getItem(0).getTitle());
 
         navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(TAG,  "headview clicked");
+                Log.v(TAG, "headview clicked");
             }
         });
 
@@ -123,15 +120,19 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Hello Snackbar!", Snackbar.LENGTH_LONG)
-                        .setAction("click snackbar", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Log.v(TAG, "onSnackbarClick ");
-                                Toast.makeText(MainActivity.this, "ss", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .show();
+                if (mSnackbar != null && mSnackbar.isShownOrQueued()) {
+                    mSnackbar.dismiss();
+                } else {
+                    mSnackbar = Snackbar.make(v, "Snacker", Snackbar.LENGTH_SHORT);
+                    mSnackbar.setAction("click snackbar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.v(TAG, "onSnackbarClick ");
+                            Toast.makeText(MainActivity.this, "ss", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    mSnackbar.show();
+                }
             }
         });
     }
