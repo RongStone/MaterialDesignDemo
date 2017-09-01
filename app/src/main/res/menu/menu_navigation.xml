@@ -16,16 +16,38 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:checkable="true"
+            android:id="@+id/one"
             android:icon="@drawable/ic_home_black_24dp"
             android:tint="@color/button_grey"
             android:title="One" />
         <item
+            android:checkable="true"
+            android:id="@+id/two"
             android:icon="@drawable/ic_favorite_black_24dp"
             android:tint="@color/button_grey"
             android:title="Two" />
         <item
+            android:checkable="true"
+            android:id="@+id/three"
             android:icon="@drawable/ic_bookmark_border_black_24dp"
             android:tint="@color/button_grey"
             android:title="Three" />
     </group>
+
+    <item android:title="Sub items">
+        <menu>
+            <item
+                android:checkable="true"
+                android:id="@+id/sub1"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Sub item 1" />
+            <item
+                android:checkable="true"
+                android:id="@+id/sub2"
+                android:icon="@drawable/ic_favorite_black_24dp"
+                android:title="Sub item 2" />
+        </menu>
+    </item>
+
 </menu>

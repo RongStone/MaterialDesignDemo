@@ -8,10 +8,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
@@ -22,6 +25,9 @@ import ui.ListContentFragment;
 import ui.PagerAdapter;
 import ui.TileContentFragment;
 
+import static com.example.rs.materialdesigndemo.R.id.action_bar_container;
+import static com.example.rs.materialdesigndemo.R.id.drawer;
+
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private String TAG = "MainActivity";
@@ -31,15 +37,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main_b);
 
 
         // Create Navigation drawer and inflate layout
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(drawer);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("MaterialDesign");
+        toolbar.setSubtitle("subtitle");
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.v(TAG, "onNavigationItemSelected " + item.getTitle());
+                return false;
+            }
+        });
+
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+//                toolbar,
+//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        mDrawerLayout.setDrawerListener(toggle);
+//        toggle.syncState();
 
         // Adding menu icon to Toolbar
         ActionBar supportActionBar = getSupportActionBar();
@@ -48,23 +70,43 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         // Set behavior of Navigation drawer
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
-                    // This method will trigger on item Click of navigation menu
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // Set item in checked state
                         menuItem.setChecked(true);
-                        Log.d(TAG, "KKKK" + menuItem.getTitle());
-//                        Toast.makeText(this, ""+ menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        Log.v(TAG, "onNavigationItemSelected " + menuItem.getTitle());
                         // TODO: handle navigation
                         // Closing drawer on item click
                         mDrawerLayout.closeDrawers();
+                        if(menuItem.getItemId() == R.id.one){
+
+                        } else if(menuItem.getItemId() == R.id.two){
+
+                        } else if (menuItem.getItemId() == R.id.three){
+
+                        }
                         return true;
                     }
                 });
+        Log.v(TAG,  "" + navigationView.getMenu().getItem(0).getTitle());
 
+        navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG,  "headview clicked");
+            }
+        });
+
+
+        //锁定侧边栏
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, GravityCompat.START);
+
+        //隐藏侧边栏某一项
+        MenuItem menuItem = navigationView.getMenu().findItem(R.id.sub2);
+        menuItem.setVisible(false);    // true 为显示，false 为隐藏
 
         //如果PagerAdapter中设置了title此处无效；
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
@@ -81,8 +123,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Hello Snackbar!",
-                        Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, "Hello Snackbar!", Snackbar.LENGTH_LONG)
+                        .setAction("click snackbar", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.v(TAG, "onSnackbarClick ");
+                                Toast.makeText(MainActivity.this, "ss", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -95,14 +144,23 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Log.v(TAG, "onOptionsItemSelected action_settings " + item.getTitle());
             return true;
         } else if (id == android.R.id.home) {
+            Log.v(TAG, "onOptionsItemSelected home " + item.getTitle());
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
