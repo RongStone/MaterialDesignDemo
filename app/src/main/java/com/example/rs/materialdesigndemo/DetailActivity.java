@@ -20,8 +20,12 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,18 +35,30 @@ import android.widget.TextView;
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "position";
+    private String TAG = "DetailActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //设置Toolbar导航键监听事件
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         // Set Collapsing Toolbar layout to the screen
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         // Set title of Detail page
-        // collapsingToolbar.setTitle(getString(R.string.item_title));
+//         collapsingToolbar.setTitle(getString(R.string.item_title));
 
         int postion = getIntent().getIntExtra(EXTRA_POSITION, 0);
         Resources resources = getResources();
@@ -62,5 +78,22 @@ public class DetailActivity extends AppCompatActivity {
         placePicutre.setImageDrawable(placePictures.getDrawable(postion % placePictures.length()));
 
         placePictures.recycle();
+
+
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Log.v(TAG, "onOptionsItemSelected action_settings " + item.getTitle());
+            return true;
+        } else if (id == android.R.id.home) {
+            Log.v(TAG, "onOptionsItemSelected home " + item.getTitle());
+        }
+        Log.v(TAG, "onOptionsItemSelected  " + item.getTitle());
+        return super.onOptionsItemSelected(item);
+    }
+
 }
